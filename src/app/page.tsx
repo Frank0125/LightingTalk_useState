@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import "@/styles/app.css";
 
-// Example 1: Form (Object)
+//* Ejemplo 1: Asignar un objeto al useState(Object)
 function Form() {
   const [form, setForm] = useState({
     firstName: 'Barbara',
@@ -14,11 +14,18 @@ function Form() {
   return (
     <div>
       <label>
-        First name:
+        Nombre:
         <input
           value={form.firstName}
           onChange={(e) => {
             setForm({
+              /**
+               * ! No funciona:
+               form.firstName = e.target.value
+
+               * * Pero sí:
+              */
+
               ...form,
               firstName: e.target.value,
             });
@@ -26,7 +33,7 @@ function Form() {
         />
       </label>
       <label>
-        Last name:
+        Apellido:
         <input
           value={form.lastName}
           onChange={(e) => {
@@ -38,7 +45,7 @@ function Form() {
         />
       </label>
       <label>
-        Email:
+        Correo electrónico:
         <input
           value={form.email}
           onChange={(e) => {
@@ -53,9 +60,9 @@ function Form() {
   );
 }
 
-// Example 2: Todo List (Array)
+//* Ejemplo 2: Lista de tareas (Array)
 function TodoList() {
-  const [todos, setTodos] = useState(createInitialTodos);
+  const [todos, setTodos] = useState(createInitialTodos); //*tareas
 
   const [text, setText] = useState('');
 
@@ -88,7 +95,7 @@ function TodoList() {
           ]);
         }}
       >
-        Add Todo
+        Agregar tarea
       </button>
       <ul>
         {todos.map((item) => (
@@ -99,36 +106,37 @@ function TodoList() {
   );
 }
 
-// Example 3: Form Reset (Using Key to Reset State)
+//* Ejemplo 3: Reiniciar formulario (Usando "key" para reiniciar estado)
 function App() {
   const [version, setVersion] = useState(0);
 
   function handleReset() {
-    setVersion(version + 1); // Change version to reset form
+    setVersion(version + 1); //* Cambia la versión para reiniciar el formulario
   }
 
   return (
     <div>
-      <button onClick={handleReset}>Reset Form</button>
-      <Form key={version} />
+      <button onClick={handleReset}>Reiniciar formulario</button>
+      <Form key={version} /> //* A partir del atributo "key" podemos comandar re-renders
     </div>
   );
 }
 
-// Example 4: Tracking Changes Between Renders
+//* Ejemplo 4: Seguimiento de cambios entre renderizados
 function CountLabel( {count } : { count : number} ) {
   const [prevCount, setPrevCount] = useState(count);
+  //* Podemos asignarle tipo a un estado con <>
   const [trend, setTrend] = useState<string | null>(null);
 
   if (prevCount !== count) {
     setPrevCount(count);
-    setTrend(count > prevCount ? 'increasing' : 'decreasing');
+    setTrend(count > prevCount ? 'aumentando' : 'disminuyendo');
   }
 
   return (
     <div>
       <h1>{count}</h1>
-      {trend && <p>The count is {trend}</p>}
+      {trend && <p>El contador está {trend}</p>}
     </div>
   );
 }
@@ -136,13 +144,13 @@ function CountLabel( {count } : { count : number} ) {
 export default function MainApp() {
   return (
     <div>
-      <h2>Example 1: Form (Object)</h2>
+      <h2>Ejemplo 1: Asignar un objeto (Object)</h2>
       <Form />
-      <h2>Example 2: Todo List (Array)</h2>
+      <h2>Ejemplo 2: Lista de elementos (Array)</h2>
       <TodoList />
-      <h2>Example 3: Form Reset</h2>
+      <h2>Ejemplo 3: Reiniciar formulario</h2>
       <App />
-      <h2>Example 4: Tracking Changes Between Renders</h2>
+      <h2>Ejemplo 4: Seguimiento de cambios entre renderizados</h2>
       <CountLabel count={5} />
     </div>
   );
