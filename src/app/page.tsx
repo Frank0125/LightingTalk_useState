@@ -2,6 +2,14 @@ import Link from 'next/link';
 import "@/styles/app.css";
 
 export default function Home() {
+//* Ejemplo 1: Asignar un objeto al useState(Object)
+function Form() {
+  const [form, setForm] = useState({
+    firstName: 'Barbara',
+    lastName: 'Hepworth',
+    email: 'bhepworth@sculpture.com',
+  });
+
   return (
     <main>
       <h1>Bienvenido a React Hooks</h1>
