@@ -3,135 +3,143 @@
 import React, { useState } from 'react';
 
 
-// Example 1: Form (Object)
+//* Ejemplo 1: Asignar un objeto al useState(Object)
 function Form() {
-  const [form, setForm] = useState({
-    firstName: 'Barbara',
-    lastName: 'Hepworth',
-    email: 'bhepworth@sculpture.com',
-  });
-
-  return (
-    <div>
-      <label>
-        First name:
-        <input
-          value={form.firstName}
-          onChange={(e) => {
-            setForm({
-              ...form,
-              firstName: e.target.value,
-            });
-          }}
-        />
-      </label>
-      <label>
-        Last name:
-        <input
-          value={form.lastName}
-          onChange={(e) => {
-            setForm({
-              ...form,
-              lastName: e.target.value,
-            });
-          }}
-        />
-      </label>
-      <label>
-        Email:
-        <input
-          value={form.email}
-          onChange={(e) => {
-            setForm({
-              ...form,
-              email: e.target.value,
-            });
-          }}
-        />
-      </label>
-    </div>
-  );
-}
-
-// Example 2: Todo List (Array)
-function TodoList() {
-  const [todos, setTodos] = useState(createInitialTodos);
-
-  const [text, setText] = useState('');
-
-  function createInitialTodos() {
-    const initialTodos = [];
-    for (let i = 0; i < 50; i++) {
-      initialTodos.push({
-        id: i,
-        text: 'Item ' + (i + 1),
-      });
+    const [form, setForm] = useState({
+      firstName: 'Barbara',
+      lastName: 'Hepworth',
+      email: 'bhepworth@sculpture.com',
+    });
+  
+    return (
+      <div>
+        <label>
+          Nombre:
+          <input
+            value={form.firstName}
+            onChange={(e) => {
+              setForm({
+                /**
+                 * ! No funciona:
+                 form.firstName = e.target.value
+  
+                 * * Pero sí:
+                */
+  
+                ...form,
+                firstName: e.target.value,
+              });
+            }}
+          />
+        </label>
+        <label>
+          Apellido:
+          <input
+            value={form.lastName}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                lastName: e.target.value,
+              });
+            }}
+          />
+        </label>
+        <label>
+          Correo electrónico:
+          <input
+            value={form.email}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                email: e.target.value,
+              });
+            }}
+          />
+        </label>
+      </div>
+    );
+  }
+  
+  //* Ejemplo 2: Lista de tareas (Array)
+  function TodoList() {
+    const [todos, setTodos] = useState(createInitialTodos); //*tareas
+  
+    const [text, setText] = useState('');
+  
+    function createInitialTodos() {
+      const initialTodos = [];
+      for (let i = 0; i < 50; i++) {
+        initialTodos.push({
+          id: i,
+          text: 'Item ' + (i + 1),
+        });
+      }
+      return initialTodos;
     }
-    return initialTodos;
+  
+    return (
+      <div>
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button
+          onClick={() => {
+            setText('');
+            setTodos([
+              {
+                id: todos.length,
+                text: text,
+              },
+              ...todos,
+            ]);
+          }}
+        >
+          Agregar tarea
+        </button>
+        <ul>
+          {todos.map((item) => (
+            <li key={item.id}>{item.text}</li>
+          ))}
+        </ul>
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <button
-        onClick={() => {
-          setText('');
-          setTodos([
-            {
-              id: todos.length,
-              text: text,
-            },
-            ...todos,
-          ]);
-        }}
-      >
-        Add Todo
-      </button>
-      <ul>
-        {todos.map((item) => (
-          <li key={item.id}>{item.text}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-// Example 3: Form Reset (Using Key to Reset State)
-function App() {
-  const [version, setVersion] = useState(0);
-
-  function handleReset() {
-    setVersion(version + 1); // Change version to reset form
+  
+  //* Ejemplo 3: Reiniciar formulario (Usando "key" para reiniciar estado)
+  function App() {
+    const [version, setVersion] = useState(0);
+  
+    function handleReset() {
+      setVersion(version + 1); //* Cambia la versión para reiniciar el formulario
+    }
+  
+    return (
+      <div>
+        <button onClick={handleReset}>Reiniciar formulario</button>
+        <Form key={version} /> //* A partir del atributo "key" podemos comandar re-renders
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <button onClick={handleReset}>Reset Form</button>
-      <Form key={version} />
-    </div>
-  );
-}
-
-// Example 4: Tracking Changes Between Renders
-function CountLabel( {count } : { count : number} ) {
-  const [prevCount, setPrevCount] = useState(count);
-  const [trend, setTrend] = useState<string | null>(null);
-
-  if (prevCount !== count) {
-    setPrevCount(count);
-    setTrend(count > prevCount ? 'increasing' : 'decreasing');
+  
+  //* Ejemplo 4: Seguimiento de cambios entre renderizados
+  function CountLabel( {count } : { count : number} ) {
+    const [prevCount, setPrevCount] = useState(count);
+    //* Podemos asignarle tipo a un estado con <>
+    const [trend, setTrend] = useState<string | null>(null);
+  
+    if (prevCount !== count) {
+      setPrevCount(count);
+      setTrend(count > prevCount ? 'aumentando' : 'disminuyendo');
+    }
+  
+    return (
+      <div>
+        <h1>{count}</h1>
+        {trend && <p>El contador está {trend}</p>}
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <h1>{count}</h1>
-      {trend && <p>The count is {trend}</p>}
-    </div>
-  );
-}
 
 export default function ExampleUseState() {
   return (
@@ -151,3 +159,5 @@ export default function ExampleUseState() {
     </main>
   );
 }
+
+
